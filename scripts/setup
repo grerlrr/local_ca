@@ -1,0 +1,10 @@
+#!/bin/sh
+SCRIPT_PATH=$(readlink -f "$0")
+SCRIPT_DIR_PATH=$(dirname $SCRIPT_PATH)
+BASE_DIR=$(dirname $SCRIPT_DIR_PATH)
+ESCAPED_BASE_DIR=${BASE_DIR//\//\\/}
+
+sed "s/{DIR}/$ESCAPED_BASE_DIR/g" $BASE_DIR/openssl.conf.template > $BASE_DIR/openssl.conf
+sed "s/{DIR}/$ESCAPED_BASE_DIR\/intermediate/g" $BASE_DIR/intermediate/openssl.conf.template > $BASE_DIR/intermediate/openssl.conf
+sed "s/{DIR}/$ESCAPED_BASE_DIR\/intermediate/g" $BASE_DIR/intermediate/openssl-san.conf.template.template > $BASE_DIR/intermediate/openssl-san.conf.template
+

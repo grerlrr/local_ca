@@ -1,0 +1,12 @@
+#!/bin/sh
+SCRIPT_PATH=$(readlink -f "$0")
+SCRIPT_DIR_PATH=$(dirname $SCRIPT_PATH)
+BASE_DIR=$(dirname $SCRIPT_DIR_PATH)
+
+openssl req -config "$BASE_DIR"/openssl.conf \
+	-key "$BASE_DIR"/private/ca.key.pem \
+	-new -x509 -days 7300 -sha256 -extensions v3_ca \
+	-out "$BASE_DIR"/certs/ca.cert.pem &&
+
+openssl x509 -noout -text -in "$BASE_DIR"/certs/ca.cert.pem
+

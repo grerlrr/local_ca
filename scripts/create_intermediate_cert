@@ -1,0 +1,24 @@
+#!/bin/sh
+SCRIPT_PATH=$(readlink -f "$0")
+SCRIPT_DIR_PATH=$(dirname $SCRIPT_PATH)
+BASE_DIR=$(dirname $SCRIPT_DIR_PATH)
+
+openssl req -config "$BASE_DIR"/intermediate/openssl.conf -new -sha256 \
+	-key "$BASE_DIR"/intermediate/private/intermediate.key.pem \
+	-out "$BASE_DIR"/intermediate/csr/intermediate.csr.pem &&
+
+openssl ca -config "$BASE_DIR"/openssl.conf -extensions v3_intermediate_ca \
+      -days 3650 -notext -md sha256 \
+      -in "$BASE_DIR"/intermediate/csr/intermediate.csr.pem \
+      -out "$BASE_DIR"/intermediate/certs/intermediate.cert.pem &&
+
+chmod 444 "$BASE_DIR"/intermediate/certs/intermediate.cert.pem
+
+openssl x509 -noout -text -in "$BASE_DIR"/intermediate/certs/intermediate.cert.pem
+
+openssl verify -CAfile "$BASE_DIR"/certs/ca.cert.pem \
+	intermediate/certs/intermediate.cert.pem && \
+cat "$BASE_DIR"/intermediate/certs/intermediate.cert.pem \
+	"$BASE_DIR"/certs/ca.cert.pem > "$BASE_DIR"/intermediate/certs/ca-chain.cert.pem && \
+chmod 444 "$BASE_DIR"/intermediate/certs/ca-chain.cert.pem
+
