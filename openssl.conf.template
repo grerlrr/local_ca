@@ -73,7 +73,7 @@ stateOrProvinceName             = State or Province Name
 localityName                    = Locality Name
 0.organizationName              = Organization Name
 organizationalUnitName          = Organizational Unit Name
-commonName                      = Common Name (such as Root CA, *.example.com, www.example.com etc)
+commonName                      = Common Name (e.g. Root CA)
 emailAddress                    = Email Address
 
 # Optionally, specify some defaults.

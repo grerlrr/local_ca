@@ -1,0 +1,27 @@
+#!/bin/sh
+SCRIPT_PATH=$(readlink -f "$0")
+SCRIPT_DIR_PATH=$(dirname $SCRIPT_PATH)
+BASE_DIR=$(dirname $SCRIPT_DIR_PATH)
+
+cd "$BASE_DIR"
+
+./scripts/setup &&
+    echo "################################################################################" &&
+    echo "Setup ROOT CA Key" &&
+    echo "################################################################################" &&
+    ./scripts/create_root_key &&
+    echo "" &&
+    echo "################################################################################" &&
+    echo "Setup ROOT CA Certificate" &&
+    echo "################################################################################" &&
+    ./scripts/create_root_cert &&
+    echo "" &&
+    echo "################################################################################" &&
+    echo "Setup Intermediate CA Key" &&
+    echo "################################################################################" &&
+    ./scripts/create_intermediate_key &&
+    echo "" &&
+    echo "################################################################################" &&
+    echo "Setup Intermediate CA Certificate" &&
+    echo "################################################################################" &&
+    ./scripts/create_intermediate_cert

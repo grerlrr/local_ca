@@ -3,7 +3,9 @@ SCRIPT_PATH=$(readlink -f "$0")
 SCRIPT_DIR_PATH=$(dirname $SCRIPT_PATH)
 BASE_DIR=$(dirname $SCRIPT_DIR_PATH)
 
-DOMAIN=$1
+echo "Please enter the domain name, e.g. www.example.com, *.example.com"
+echo "You will need to enter the domain name again later in common name section when generating the CSR."
+read DOMAIN
 DOMAIN_REVERSE=$(echo $DOMAIN|tr "." "\n"|tac|paste -s -d"."|tr "*" "_")
 KEY_PATH="$BASE_DIR"/intermediate/private/$DOMAIN_REVERSE.pem 
 OPENSSL_INTERMEDIATE_CONFIG="$BASE_DIR"/intermediate/openssl.conf
@@ -25,7 +27,7 @@ openssl req -config "$OPENSSL_SAN_CONFIG" \
       -new -out "$CSR_PATH"
 
 # Create Certificate
-openssl ca -config "$OPENSSL_INTERMEDIATE_CONFIG" \
+openssl ca -config "$OPENSSL_SAN_CONFIG" \
       -extensions server_cert -days 375 -notext -md sha256 \
       -in "$CSR_PATH" \
       -out "$CERT_PATH" &&
